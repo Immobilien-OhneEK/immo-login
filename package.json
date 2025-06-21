@@ -1,0 +1,18 @@
+{
+  "name": "immobilien-login-landingpage",
+  "version": "1.0.0",
+  "description": "Landingpage mit Login-Funktion f\u00fcr Immobilieninvestments ohne Eigenkapital",
+  "main": "index.html",
+  "scripts": {
+    "start": "echo Dies ist eine statische HTML-Seite ohne Node-Backend"
+  },
+  "keywords": [
+    "immobilien",
+    "landingpage",
+    "login",
+    "netlify",
+    "html"
+  ],
+  "author": "",
+  "license": "MIT"
+}
