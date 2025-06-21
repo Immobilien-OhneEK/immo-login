@@ -1,46 +1,45 @@
 const express = require("express");
-const cors = require("cors");
-const bodyParser = require("body-parser");
 const fs = require("fs");
-
+const cors = require("cors");
 const app = express();
+const PORT = process.env.PORT || 3000;
+const USERS_FILE = "./users.json";
+
 app.use(cors());
-app.use(bodyParser.json());
+app.use(express.json());
 
-const userFile = "users.json";
-let users = [];
-
-function loadUsers() {
-  if (fs.existsSync(userFile)) {
-    users = JSON.parse(fs.readFileSync(userFile, "utf8"));
-  } else {
-    users = [];
-  }
+function readUsers() {
+  if (!fs.existsSync(USERS_FILE)) return [];
+  return JSON.parse(fs.readFileSync(USERS_FILE));
 }
 
-function saveUsers() {
-  fs.writeFileSync(userFile, JSON.stringify(users, null, 2));
+function writeUsers(users) {
+  fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2));
 }
-
-loadUsers();
 
 app.post("/login", (req, res) => {
   const { username, password } = req.body;
-  const valid = users.find(u => u.username === username && u.password === password);
-  res.json({ success: !!valid });
+  const users = readUsers();
+  const match = users.find(u => u.username === username && u.password === password);
+  res.json({ success: !!match });
 });
 
 app.post("/add-user", (req, res) => {
   const { username, password } = req.body;
-  if (!username || !password) return res.json({ success: false });
+  if (!username || !password) return res.status(400).json({ success: false });
 
-  const exists = users.find(u => u.username === username);
-  if (exists) return res.json({ success: false });
+  const users = readUsers();
+  if (users.find(u => u.username === username)) {
+    return res.status(409).json({ success: false, message: "Benutzer existiert bereits" });
+  }
 
   users.push({ username, password });
-  saveUsers();
+  writeUsers(users);
   res.json({ success: true });
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log("Server läuft auf Port " + PORT));
+app.get("/", (req, res) => {
+  res.send("API läuft!");
+});
+
+app.listen(PORT, () => console.log(`Server läuft auf Port ${PORT}`));
