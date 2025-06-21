@@ -1,7 +1,7 @@
 {
   "name": "immo-login-backend",
   "version": "1.0.0",
-  "description": "Backend-Login-Service f\u00fcr Immobilienprojekt",
+  "description": "Backend-Login-Service f\u00fcr Immobilienprojekt mit Benutzer-Hinzuf\u00fcgen",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"

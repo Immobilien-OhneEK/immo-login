@@ -7,12 +7,39 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-const users = JSON.parse(fs.readFileSync("users.json", "utf8"));
+const userFile = "users.json";
+let users = [];
+
+function loadUsers() {
+  if (fs.existsSync(userFile)) {
+    users = JSON.parse(fs.readFileSync(userFile, "utf8"));
+  } else {
+    users = [];
+  }
+}
+
+function saveUsers() {
+  fs.writeFileSync(userFile, JSON.stringify(users, null, 2));
+}
+
+loadUsers();
 
 app.post("/login", (req, res) => {
   const { username, password } = req.body;
   const valid = users.find(u => u.username === username && u.password === password);
   res.json({ success: !!valid });
+});
+
+app.post("/add-user", (req, res) => {
+  const { username, password } = req.body;
+  if (!username || !password) return res.json({ success: false });
+
+  const exists = users.find(u => u.username === username);
+  if (exists) return res.json({ success: false });
+
+  users.push({ username, password });
+  saveUsers();
+  res.json({ success: true });
 });
 
 const PORT = process.env.PORT || 3000;
