@@ -1,18 +1,14 @@
 {
-  "name": "immobilien-login-landingpage",
+  "name": "immo-login-backend",
   "version": "1.0.0",
-  "description": "Landingpage mit Login-Funktion f\u00fcr Immobilieninvestments ohne Eigenkapital",
-  "main": "index.html",
+  "description": "Backend-Login-Service f\u00fcr Immobilienprojekt",
+  "main": "server.js",
   "scripts": {
-    "start": "echo Dies ist eine statische HTML-Seite ohne Node-Backend"
+    "start": "node server.js"
   },
-  "keywords": [
-    "immobilien",
-    "landingpage",
-    "login",
-    "netlify",
-    "html"
-  ],
-  "author": "",
-  "license": "MIT"
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "express": "^4.18.2"
+  }
 }
